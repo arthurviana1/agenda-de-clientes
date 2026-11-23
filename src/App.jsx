@@ -6,6 +6,7 @@ import {
   getContacts,
   updateContact,
 } from "./api.js";
+import "./App.css";
 
 const emptyContact = { name: "", surname: "", phone: "" };
 
@@ -184,33 +185,6 @@ export default function App() {
     }
   }
 
-  async function exportToExcel() {
-    try {
-      const { default: ExcelJS } = await import("exceljs");
-      const workbook = new ExcelJS.Workbook();
-      const worksheet = workbook.addWorksheet("Contatos");
-      worksheet.addRow(["Nome", "Sobrenome", "Telefones"]);
-      contacts.forEach(({ name, surname, phones }) => {
-        worksheet.addRow([name, surname, phones.map(formatPhone).join(", ")]);
-      });
-
-      const file = new Blob([await workbook.xlsx.writeBuffer()], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      });
-      const url = URL.createObjectURL(file);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "agenda_contatos.xlsx";
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      window.setTimeout(() => URL.revokeObjectURL(url), 0);
-    } catch (exportError) {
-      console.error("Erro ao exportar contatos:", exportError);
-      setError("Não foi possível exportar os contatos. Tente novamente.");
-    }
-  }
-
   return (
     <main className="min-vh-100 bg-dark text-light py-5">
       <div className="container">
@@ -233,8 +207,8 @@ export default function App() {
                   <input
                     id="name"
                     name="name"
-                    className="form-control bg-dark text-light border-secondary"
-                    placeholder="Nome"
+                    className="form-control contact-input bg-dark border-secondary"
+                    placeholder="Digite o nome"
                     value={form.name}
                     onChange={updateField}
                     maxLength={100}
@@ -248,8 +222,8 @@ export default function App() {
                   <input
                     id="surname"
                     name="surname"
-                    className="form-control bg-dark text-light border-secondary"
-                    placeholder="Sobrenome"
+                    className="form-control contact-input bg-dark border-secondary"
+                    placeholder="Digite o sobrenome"
                     value={form.surname}
                     onChange={updateField}
                     maxLength={100}
@@ -264,8 +238,8 @@ export default function App() {
                     id="phone"
                     name="phone"
                     type="tel"
-                    className="form-control bg-dark text-light border-secondary"
-                    placeholder="(00) 00000-0000"
+                    className="form-control contact-input bg-dark border-secondary"
+                    placeholder="Ex.: (11) 99999-9999"
                     value={form.phone}
                     onChange={updateField}
                     maxLength={15}
@@ -303,7 +277,7 @@ export default function App() {
                 <input
                   id="search"
                   type="search"
-                  className="form-control bg-dark text-light border-secondary"
+                  className="form-control contact-input bg-dark border-secondary"
                   placeholder="Buscar por nome, sobrenome ou telefone..."
                   value={search}
                   onChange={(event) => setSearch(event.target.value)}
@@ -368,14 +342,6 @@ export default function App() {
                 </table>
               </div>
 
-              <button
-                type="button"
-                className="btn btn-success w-100 mt-4"
-                onClick={exportToExcel}
-                disabled={loading}
-              >
-                Exportar para o Excel
-              </button>
             </div>
           </section>
         </div>

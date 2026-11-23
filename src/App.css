@@ -1,0 +1,22 @@
+.form-label {
+  color: #fff !important;
+}
+
+.form-control.contact-input,
+.form-control.contact-input:focus {
+  color: #fff !important;
+  caret-color: #fff;
+  -webkit-text-fill-color: #fff;
+}
+
+.form-control.contact-input::placeholder {
+  color: #adb5bd;
+  -webkit-text-fill-color: #adb5bd;
+  opacity: 1;
+}
+
+.form-control.contact-input:-webkit-autofill,
+.form-control.contact-input:-webkit-autofill:hover,
+.form-control.contact-input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #fff;
+}
